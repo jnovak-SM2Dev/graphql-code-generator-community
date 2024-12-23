@@ -72,8 +72,8 @@ export class CustomMapperFetcher extends FetcherRenderer {
 
     const typedFetcher = this.getFetcherFnName(operationResultType, operationVariablesTypes);
     const implFetcher = this._isReactHook
-      ? `${typedFetcher}(${documentVariableName}).bind(null, variables)`
-      : `${typedFetcher}(${documentVariableName}, variables)`;
+      ? `${typedFetcher}(${documentVariableName}).bind(null, variables, options?.headers)`
+      : `${typedFetcher}(${documentVariableName}, variables, options?.headers)`;
 
     return generateBaseQueryHook({
       implFetcher,
@@ -87,8 +87,8 @@ export class CustomMapperFetcher extends FetcherRenderer {
 
     const typedFetcher = this.getFetcherFnName(operationResultType, operationVariablesTypes);
     const implFetcher = this._isReactHook
-      ? `${typedFetcher}(${documentVariableName})`
-      : `(${variables}) => ${typedFetcher}(${documentVariableName}, variables)()`;
+      ? `${typedFetcher}(${documentVariableName}, options?.headers)`
+      : `(${variables}) => ${typedFetcher}(${documentVariableName}, variables, options?.headers)()`;
 
     return generateBaseMutationHook({
       implFetcher,

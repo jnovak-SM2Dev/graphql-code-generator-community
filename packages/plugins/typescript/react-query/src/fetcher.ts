@@ -158,7 +158,7 @@ export abstract class FetcherRenderer {
     this.visitor.reactQueryOptionsIdentifiersInUse.add(mutation.getOptions());
 
     const variables = `variables?: ${operationVariablesTypes}`;
-    const options = `options?: ${mutation.getOptions()}<${operationResultType}, TError, ${operationVariablesTypes}, TContext>`;
+    const options = `options?: ${mutation.getOptions()}<${operationResultType}, TError, ${operationVariablesTypes}, TContext> & { headers?: Record<string, string> }`;
 
     const generateBaseMutationHook = (hookConfig: GenerateBaseHookConfig) => {
       const { implArguments, implHookOuter = '', implFetcher } = hookConfig;
@@ -196,9 +196,9 @@ export abstract class FetcherRenderer {
     const { query } = this.createQueryMethodMap(isSuspense);
 
     if (this.visitor.config.reactQueryVersion <= 4) {
-      return `options?: ${query.getOptions()}<${operationResultType}, TError, TData>`;
+      return `options?: ${query.getOptions()}<${operationResultType}, TError, TData> & { headers?: Record<string, string> }`;
     }
-    return `options?: Omit<${query.getOptions()}<${operationResultType}, TError, TData>, 'queryKey'> & { queryKey?: ${query.getOptions()}<${operationResultType}, TError, TData>['queryKey'] }`;
+    return `options?: Omit<${query.getOptions()}<${operationResultType}, TError, TData>, 'queryKey'> & { queryKey?: ${query.getOptions()}<${operationResultType}, TError, TData>['queryKey'] } & { headers?: Record<string, string> }`;
   }
 
   private generateInfiniteQueryVariablesSignature(config: GenerateConfig): string {
